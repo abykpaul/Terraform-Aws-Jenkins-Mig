@@ -30,9 +30,18 @@ pipeline {
 
     stage('Terraform Apply') {
       steps {
-        input "Proceed?"
+        input "Proceed to apply infrastructure?"
         withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
           bat 'terraform apply -auto-approve'
+        }
+      }
+    }
+
+    stage('Terraform Destroy') {
+      steps {
+        input "Do you want to destroy the infrastructure?"
+        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+          bat 'terraform destroy -auto-approve'
         }
       }
     }
