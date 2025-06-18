@@ -3,13 +3,12 @@ pipeline {
 
   environment {
     AWS_REGION = 'ap-south-1'
-    AWS_DEFAULT_REGION = 'ap-south-1'
   }
 
   stages {
     stage('Clone Repo') {
       steps {
-        git 'https://github.com/abykpaul/Terraform-Aws-Jenkins-Mig.git'
+        git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
       }
     }
 
@@ -31,7 +30,7 @@ pipeline {
 
     stage('Terraform Apply') {
       steps {
-        input "Proceed with Terraform Apply?"
+        input "Proceed?"
         withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
           sh 'terraform apply -auto-approve'
         }
