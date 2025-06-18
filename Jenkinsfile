@@ -15,7 +15,7 @@ pipeline {
     stage('Terraform Init') {
       steps {
         withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          sh 'terraform init'
+          bat 'terraform init'
         }
       }
     }
@@ -23,7 +23,7 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          sh 'terraform plan'
+          bat 'terraform plan'
         }
       }
     }
@@ -32,7 +32,7 @@ pipeline {
       steps {
         input "Proceed?"
         withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          sh 'terraform apply -auto-approve'
+          bat 'terraform apply -auto-approve'
         }
       }
     }
