@@ -2,34 +2,39 @@ pipeline {
   agent any
 
   environment {
-    TF_VAR_region = 'ap-south-1'
+    AWS_REGION = 'ap-south-1'
+    AWS_DEFAULT_REGION = 'ap-south-1'
   }
 
   stages {
     stage('Clone Repo') {
       steps {
-        git 'https://github.com/abykpaul/Terraform-Aws-Jenkins-Mig.git'
+        git 'https://github.com/your-username/your-repo.git'
       }
     }
 
     stage('Terraform Init') {
       steps {
-        dir('terraform'){
-        sh 'terraform init'
+        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+          sh 'terraform init'
+        }
       }
-    }
     }
 
     stage('Terraform Plan') {
       steps {
-        sh 'terraform plan'
+        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+          sh 'terraform plan'
+        }
       }
     }
 
     stage('Terraform Apply') {
       steps {
-        input "Proceed to apply?"  // Manual confirmation
-        sh 'terraform apply -auto-approve'
+        input "Proceed with Terraform Apply?"
+        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+          sh 'terraform apply -auto-approve'
+        }
       }
     }
   }
