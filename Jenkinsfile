@@ -14,16 +14,16 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          bat 'terraform init'
+        withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
+          bat 'terraform init -input=false'
         }
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          bat 'terraform plan'
+        withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
+          bat 'terraform plan -out=tfplan.out'
         }
       }
     }
@@ -31,8 +31,8 @@ pipeline {
     stage('Terraform Apply') {
       steps {
         input "Proceed to apply infrastructure?"
-        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
-          bat 'terraform apply -auto-approve'
+        withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
+          bat 'terraform apply -auto-approve tfplan.out'
         }
       }
     }
@@ -40,7 +40,7 @@ pipeline {
     stage('Terraform Destroy') {
       steps {
         input "Do you want to destroy the infrastructure?"
-        withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+        withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
           bat 'terraform destroy -auto-approve'
         }
       }
