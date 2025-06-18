@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'master' }
+  agent any
 
   environment {
     TF_VAR_region = 'ap-south-1'
